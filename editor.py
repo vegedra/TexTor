@@ -14,7 +14,7 @@ class WordProcessor:
         self.menu_bar = tk.Menu(self.root)
         self.root.config(menu=self.menu_bar)
 
-        # File Menu
+        # Menu de arquivos
         self.file_menu = tk.Menu(self.menu_bar, tearoff=0)
         self.menu_bar.add_cascade(label="File", menu=self.file_menu)
         self.file_menu.add_command(label="New", command=self.new_file)
@@ -24,7 +24,7 @@ class WordProcessor:
         self.file_menu.add_separator()
         self.file_menu.add_command(label="Exit", command=self.exit)
 
-        # Edit Menu
+        # Menu de editar
         self.edit_menu = tk.Menu(self.menu_bar, tearoff=0)
         self.menu_bar.add_cascade(label="Edit", menu=self.edit_menu)
         self.edit_menu.add_command(label="Undo", command=self.text_area.edit_undo)
@@ -72,7 +72,7 @@ class WordProcessor:
 
     def export_text_to_file(self):
         try:
-            # Asking for file name and type to save
+            # Pede pelo nome e tipo dod arquivo
             export_file = filedialog.asksaveasfilename(
                 title="Export File As",
                 defaultextension=".json",
@@ -80,10 +80,9 @@ class WordProcessor:
                 filetypes=(("JSON Files", "*.json"), ("All Files", "*.*"))
             )
 
-            # Creating a list to store content and formatting information
+            # Lista para guardar as informações
             export_data = []
 
-            # Iterating through lines in the text area
             lines = self.text_area.get("1.0", tk.END).split('\n')[:-1]
             for line_number, line in enumerate(lines, start=1):
                 # Extracting color and background color from the tag
@@ -91,14 +90,13 @@ class WordProcessor:
                 color = self.text_area.tag_cget(tags[0], "foreground") if "text_color" in tags else "white"
                 background_color = self.text_area.cget("bg")
 
-                # Appending line data to the export_data list
                 export_data.append({
                     "text": line,
                     "color": color,
                     "background_color": background_color
                 })
 
-            # Writing JSON data into file
+            # Fazendo o JSON
             with open(export_file, "w", encoding="utf-8") as outfile:
                 json.dump({"content": export_data}, outfile, ensure_ascii=False, indent=2)
 
